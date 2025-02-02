@@ -1,0 +1,60 @@
+---
+title: "Ranked Candies in London"
+author: Parker Hall
+date: "2025-02-02"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load Necessary Libraries
+```{r Load Necessary Libraries}
+# install.packages("ggplot2")
+# install.packages("dplyr")
+# install.packages("tibble")
+library(ggplot2)
+library(dplyr)
+library(tibble)
+# install.packages("tinytex")
+# tinytex::install_tinytex()
+```
+
+Plot the Graph
+```{r Plot the Graph}
+# Save data to the candies variable
+candies <- tibble(
+  Candy = c("Dairy Milk", "Maltesers", "Galaxy", "Haribo Starmix",
+            "Kit Kat", "Aero", "Fruit Pastilles", "Smarties",
+            "Terry's Chocolate Orange", "Bounty"),
+  Rank = c(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+)
+
+# Compute percentage
+candies <- candies %>%
+  mutate(Percentage = Rank / sum(Rank) * 100)
+
+# Create the polar bar plot
+ggplot(candies, aes(x = 2, y = Percentage, fill = Candy)) +
+  geom_bar(stat = "identity", width = 1, color = "black") +
+  coord_polar(theta = "y") +
+  xlim(0.5, 2.5) +
+  theme_void() +
+  theme(legend.position = "right") +
+  ggtitle("Most Popular Candies in London, England - Ranking") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Create bar graph
+ggplot(candies, aes(x = reorder(Candy, Rank), y = Rank, fill = Candy)) +
+  geom_bar(stat = "identity", color = "black") +
+  coord_flip() +  # Flip to make it more readable
+  theme_minimal() +
+  ggtitle("Most Popular Candies in London - Bar Graph") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = "Candy", y = "Ranking")
+
+```
+
